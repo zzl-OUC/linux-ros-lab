@@ -1,0 +1,8 @@
+Lab 1 - Shell exercise 1
+file      : dante.txt (Dante Alighieri, La Divina Commedia)
+bytes     : 557042
+lines     : 19567          # wc -l 数的是换行符个数
+words     : 97676          # wc -w 按空白切分的词元个数
+non-blank : 14338                           # grep -c '[^[:space:]]'
+blank     : 5229
+check     : lines - blank = 14338 == non-blank -> OK
