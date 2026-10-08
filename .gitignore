@@ -1,0 +1,41 @@
+# build artifacts
+build/
+*.o
+*.obj
+*.a
+*.so
+*.cmake
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile
+
+# executables produced by the coursework (extension-less, compiled by g++)
+lab1/cppwarmup/q0*_*/
+lab1/cppwarmup/q0*
+lab1/cppwarmup/q1*
+!lab1/cppwarmup/*.cpp
+lab1/RandomVector/random_vector
+
+# downloaded third-party corpora — re-fetch with the command in each lab's README
+dante.txt
+dante_raw.txt
+
+# upstream clones with their own history: never nest these into this repo
+vnav-codes/
+VNAV-labs/
+
+# LaTeX junk
+*.aux
+*.log
+*.out
+*.toc
+*.bbl
+*.blg
+*.synctex.gz
+
+# editor / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
