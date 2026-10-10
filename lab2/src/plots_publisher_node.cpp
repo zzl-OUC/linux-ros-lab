@@ -26,7 +26,7 @@ class PlotsPublisherNode {
         // 所以 (ref_frame, dest_frame) 正好给出下一个轨迹点；
         // ros::Time(0) 表示取缓冲里最新一帧，而不是某个指定时刻。
         transform =
-            parent->tf_buffer.lookupTransform(ref_frame, dest_frame, ros::Time(0));
+            parent->tf_buffer_.lookupTransform(ref_frame, dest_frame, ros::Time(0));
         // ~~~~~~~~~ END OF EDIT SECTION ~~~~~~~~~
 
         while (poses.size() >= buffer_size) {
