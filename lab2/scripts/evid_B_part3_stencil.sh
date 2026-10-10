@@ -3,8 +3,8 @@
 #   I   workspace + static scene
 #   III the four questions (nodes / no-roslaunch / pub-sub + mesh topic / static:=True)
 source /opt/ros/noetic/setup.bash
-source ~/vnav_ws/devel/setup.bash
-source /mnt/c/Users/13907/lab2/scripts/harness.sh
+source "$(dirname "${BASH_SOURCE[0]}")/harness.sh"   # LAB2_ROOT / SRC_DIR / VNAV_WS / PKG
+source "$VNAV_WS/devel/setup.bash"
 L="$LOG/part3_stencil"; mkdir -p "$L"; rm -f "$L"/*
 PKG=~/vnav_ws/src/two_drones_pkg
 kill_ros
@@ -99,4 +99,4 @@ rviz -d $PKG/config/lab2_world.rviz > "$L/rviz_manual.log" 2>&1 &
 grab 33_manual_static 12
 kill_ros
 echo "########## $(date -Is) PART THREE I+III DONE ##########"
-sha256sum "$SHOT"/3*.png | sed 's#/mnt/c/Users/13907/lab2/shots/##'
+sha256sum "$SHOT"/3*.png | sed "s#^$SHOT/##"

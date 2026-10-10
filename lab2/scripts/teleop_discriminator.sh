@@ -4,7 +4,7 @@
 # are not reaching the reader and "no cmd_vel" is an instrument failure, not a
 # statement about teleop.
 source /opt/ros/noetic/setup.bash
-source /mnt/c/Users/13907/lab2/scripts/harness.sh
+source "$(dirname "${BASH_SOURCE[0]}")/harness.sh"
 L="$LOG/parttwo"; mkdir -p "$L"
 kill_ros; xvfb_up
 echo "########## $(date -Is) TELEOP DISCRIMINATOR ##########"

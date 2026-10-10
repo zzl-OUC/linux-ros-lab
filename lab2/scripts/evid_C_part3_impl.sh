@@ -2,26 +2,25 @@
 # LAB2 Part Three IV + V: install the completed sources, rebuild, run the moving
 # scene, capture RViz in both fixed frames, and verify the geometry numerically.
 source /opt/ros/noetic/setup.bash
-source ~/vnav_ws/devel/setup.bash
-source /mnt/c/Users/13907/lab2/scripts/harness.sh
+source "$(dirname "${BASH_SOURCE[0]}")/harness.sh"   # LAB2_ROOT / SRC_DIR / VNAV_WS / PKG
+source "$VNAV_WS/devel/setup.bash"
 L="$LOG/part3_impl"; mkdir -p "$L"; rm -f "$L"/*
-PKG=~/vnav_ws/src/two_drones_pkg
 kill_ros
 echo "########## $(date -Is) PART THREE IV+V ##########"
 
 echo "=== install the completed sources ==="
-cp -v /mnt/c/Users/13907/lab2/impl/src/frames_publisher_node.cpp $PKG/src/
-cp -v /mnt/c/Users/13907/lab2/impl/src/plots_publisher_node.cpp  $PKG/src/
+cp -v "$SRC_DIR/frames_publisher_node.cpp" "$PKG/src/"
+cp -v "$SRC_DIR/plots_publisher_node.cpp" "$PKG/src/"
 echo "FILL IN markers left: $(grep -c 'FILL IN' $PKG/src/*.cpp | tr '\n' ' ')"
-diff -u /mnt/c/Users/13907/lab2/src_snapshot/src/frames_publisher_node.cpp \
+diff -u "$LAB2_ROOT/src_snapshot/src/frames_publisher_node.cpp" \
         $PKG/src/frames_publisher_node.cpp > "$L/diff_frames.patch"
-diff -u /mnt/c/Users/13907/lab2/src_snapshot/src/plots_publisher_node.cpp \
+diff -u "$LAB2_ROOT/src_snapshot/src/plots_publisher_node.cpp" \
         $PKG/src/plots_publisher_node.cpp  > "$L/diff_plots.patch"
 wc -l "$L"/diff_*.patch
 
 echo "=== catkin build ==="
-( cd ~/vnav_ws && catkin build 2>&1 | tr -d '\r' | grep -vE "^\[build [0-9]" | tail -12 ) | tee "$L/build.log"
-ls -l ~/vnav_ws/devel/lib/two_drones_pkg/
+( cd "$VNAV_WS" && catkin build 2>&1 | tr -d '\r' | grep -vE "^\[build [0-9]" | tail -12 ) | tee "$L/build.log"
+ls -l "$VNAV_WS/devel/lib/two_drones_pkg/"
 
 xvfb_up
 echo
@@ -41,7 +40,7 @@ timeout 6 rosrun tf tf_echo world av2 > "$L/tf_world_av2.txt" 2>&1; head -8 "$L/
 timeout 6 rosrun tf tf_echo av1 av2  > "$L/tf_av1_av2.txt"  2>&1; head -8 "$L/tf_av1_av2.txt"
 
 echo "=== numeric verification (20 s of tf samples + /visuals trails) ==="
-timeout 90 python3 /mnt/c/Users/13907/lab2/scripts/verify_trajectories.py 20 > "$L/verify.json" 2>"$L/verify.err"
+timeout 90 python3 "$(dirname "${BASH_SOURCE[0]}")/verify_trajectories.py" 20 > "$L/verify.json" 2>"$L/verify.err"
 cat "$L/verify.json"; tail -3 "$L/verify.err"
 cp -f /tmp/lab2_tf_samples.csv "$L/" 2>/dev/null; wc -l "$L/lab2_tf_samples.csv" 2>/dev/null
 
@@ -54,4 +53,4 @@ grab 44_dyn_av1_2 4
 pkill -9 -f rviz; sleep 1
 kill_ros
 echo "########## $(date -Is) PART THREE IV+V DONE ##########"
-sha256sum "$SHOT"/4*.png | sed 's#/mnt/c/Users/13907/lab2/shots/##'
+sha256sum "$SHOT"/4*.png | sed "s#^$SHOT/##"

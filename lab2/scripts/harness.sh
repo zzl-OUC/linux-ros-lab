@@ -5,8 +5,18 @@
 export DISPLAY=:99
 export LIBGL_ALWAYS_SOFTWARE=1
 export DISABLE_ROS1_EOL_WARNINGS=1
-SHOT=/mnt/c/Users/13907/lab2/shots
-LOG=/mnt/c/Users/13907/lab2/logs
+# Everything below is overridable, so this runs on a machine other than the one it
+# was written on:
+#   LAB2_ROOT  scratch dir holding shots/ and logs/       (default ~/lab2)
+#   SRC_DIR    node sources to install into the package   (default this repo's lab2/src)
+#   VNAV_WS    the catkin workspace                       (default ~/vnav_ws)
+#   PKG        the ROS package under test                 (default $VNAV_WS/src/two_drones_pkg)
+export LAB2_ROOT="${LAB2_ROOT:-$HOME/lab2}"
+export SRC_DIR="${SRC_DIR:-$(cd "$(dirname "${BASH_SOURCE[0]}")/../src" && pwd)}"
+export VNAV_WS="${VNAV_WS:-$HOME/vnav_ws}"
+export PKG="${PKG:-$VNAV_WS/src/two_drones_pkg}"
+SHOT="$LAB2_ROOT/shots"
+LOG="$LAB2_ROOT/logs"
 mkdir -p "$SHOT" "$LOG"
 
 xvfb_up() {

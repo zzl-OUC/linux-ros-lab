@@ -84,10 +84,53 @@ g++ -std=c++11 -Wall -pedantic -o random_vector main.cpp random_vector.cpp
 
 ## Lab 2 — ROS
 
-`lab2/src/` holds two ROS nodes (`frames_publisher_node`, `plots_publisher_node`);
-`lab2/scripts/` holds the preflight, install and evidence-collection scripts used to verify
-topic publication, TF frames and RViz behaviour on the real system rather than by inspection.
-The scripts are idempotent and safe to read as documentation of what was actually checked.
+`lab2/src/` holds the two ROS nodes that implement the lab's moving scene. `lab2/scripts/` holds
+the installer, the preflight probe, and the evidence legs that checked the result on a live ROS
+graph rather than by reading the code:
+
+| script | what it establishes |
+|---|---|
+| `install_ros.sh`, `preflight.sh` | ROS Noetic is installed and the toolchain is present |
+| `evid_A_parttwo.sh`, `evid_A2_teleop.sh` | Part Two: `roscore`, turtlesim teleop, `rqt_graph`, `rosnode`/`rostopic`, `turtle_tf`, `rqt_tf_tree` |
+| `evid_B_part3_stencil.sh` | the unmodified upstream package builds and runs — the positive control for the legs below |
+| `evid_C_part3_impl.sh` | these two nodes build, and RViz draws all three trails in both fixed frames |
+| `evid_D_verify.sh` | the geometry is numerically correct, not merely plausible on screen |
+| `recheck_repo_copy.sh` | a re-run using this repository's own copies of the two sources |
+| `demo_lab2.sh` / `demo_lab2_stop.sh` | one-shot live demo: moving scene plus RViz in `world` and in `av1` |
+
+The load-bearing one is `verify_trajectories.py`. It samples `/tf` at 50 Hz while the scene runs,
+recomputes `o2_1 = Rᵀ(o2_w − o1_w)` from the broadcast quaternion, and checks that against what
+tf reports — then does the same for the three `/visuals` marker trails. Max absolute residual,
+reproduced 2026-10-10 over 489 samples:
+
+| claim | residual |
+|---|---|
+| `o1_w` stays on the unit circle | 1.1e-16 |
+| `o2_w` satisfies `z = 1 − 2x²` with `y ≡ 0` (the parabola arc) | 3.3e-16 |
+| `o2_1` stays in the plane `z₁ = 2y₁ + 1` | 6.7e-16 |
+| `o2_1` stays on the cylinder `(x₁+1)² + (y₁+½)² = ¼` | 3.9e-16 |
+| tf's `o2_1` vs the hand-computed one | 6.7e-16 |
+
+Plane ∩ cylinder is the ellipse the lab asks you to find, and its semi-axes come out of the same
+receipt as the in-plane distance from `(−1, −½, 0)`: 0.50000 and 1.11803, against the expected
+½ and √5/2 = 1.118034.
+
+Nothing here hard-codes the machine it was written on — the scratch locations are environment
+variables:
+
+| var | meaning | default |
+|---|---|---|
+| `LAB2_ROOT` | scratch dir for `shots/` and `logs/` | `~/lab2` |
+| `VNAV_WS` | the catkin workspace | `~/vnav_ws` |
+| `PKG` | the ROS package under test | `$VNAV_WS/src/two_drones_pkg` |
+| `SRC_DIR` | sources installed into `$PKG/src` by `evid_C_part3_impl.sh` | this repo's `lab2/src` |
+
+```bash
+LAB2_ROOT=/tmp/lab2 bash lab2/scripts/evid_C_part3_impl.sh
+```
+
+The shipped nodes are the ones `recheck_repo_copy.sh` rebuilt and re-verified on 2026-10-10. No
+screenshots are included, so nothing here asks you to trust a picture taken of a different build.
 
 ---
 
@@ -96,3 +139,11 @@ The scripts are idempotent and safe to read as documentation of what was actuall
 Written lab reports are kept out of this repository because they carry name and student
 email in their title blocks. Build inputs downloaded from third parties (`dante.txt`) and
 upstream clones that own their own history (`vnav-codes/`) are excluded by `.gitignore`.
+
+Also excluded is the scaffolding the lab hands out, which belongs to upstream:
+`launch/two_drones.launch`, `package.xml`, `CMakeLists.txt` and the `mesh/quadrotor.dae` model.
+Clone [MIT-SPARK/VNAV-labs](https://github.com/MIT-SPARK/VNAV-labs) and drop `two_drones_pkg`
+into `$VNAV_WS/src` before running the evidence legs — they assume a package that already builds.
+The two RViz configs the legs reference (`lab2_world.rviz`, `lab2_av1.rviz`) are local copies of
+upstream `default.rviz` that differ only in Fixed Frame (`world` vs `av1`) plus enabled `TF` and
+`MarkerArray` displays.

@@ -8,13 +8,13 @@ for f in lab2_world lab2_av1; do
 done
 echo
 echo "=== rviz logs: did it complain about the fixed frame? ==="
-for f in /mnt/c/Users/13907/lab2/logs/part3_impl/rviz_av1.log \
-         /mnt/c/Users/13907/lab2/logs/part3_impl/rviz_dyn.log; do
+for f in ${LAB2_ROOT:-$HOME/lab2}/logs/part3_impl/rviz_av1.log \
+         ${LAB2_ROOT:-$HOME/lab2}/logs/part3_impl/rviz_dyn.log; do
   echo "--- $f"; grep -aiE "fixed frame|Frame not found|does not exist|Warning|ERROR" "$f" 2>/dev/null | head -6
 done
 echo
 echo "=== pixel comparison: is the av1 view actually different? ==="
-cd /mnt/c/Users/13907/lab2/shots
+cd ${LAB2_ROOT:-$HOME/lab2}/shots
 for p in "41_dyn_world_1 42_dyn_world_2" "41_dyn_world_1 43_dyn_av1_1" "43_dyn_av1_1 44_dyn_av1_2"; do
   set -- $p
   d=$(compare -metric AE "$1.png" "$2.png" null: 2>&1)

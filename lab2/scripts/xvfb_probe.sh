@@ -3,7 +3,7 @@
 # WSLg's XWayland refuses XGetImage (BadMatch), so an in-Linux grab needs a real
 # memory framebuffer of its own.
 source /opt/ros/noetic/setup.bash
-OUT=/mnt/c/Users/13907/lab2/shots/_probe
+OUT=${LAB2_ROOT:-$HOME/lab2}/shots/_probe
 mkdir -p "$OUT"; rm -f "$OUT"/X_*
 
 echo "=== install xvfb + mesa (software GL) ==="

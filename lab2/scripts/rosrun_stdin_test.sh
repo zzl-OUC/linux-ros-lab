@@ -3,7 +3,7 @@
 # above published nothing -- the reader was fine, the launcher was not.
 # Test both spellings side by side, judging only on /turtle1/cmd_vel.
 source /opt/ros/noetic/setup.bash
-source /mnt/c/Users/13907/lab2/scripts/harness.sh
+source "$(dirname "${BASH_SOURCE[0]}")/harness.sh"
 L="$LOG/parttwo"; mkdir -p "$L"
 kill_ros; xvfb_up
 echo "########## $(date -Is) ROSRUN-vs-DIRECT STDIN TEST ##########"

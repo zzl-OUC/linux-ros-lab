@@ -2,7 +2,7 @@
 # Which mechanism actually delivers keystrokes to turtle_teleop_key?
 # Tested candidates, each judged by "did /turtle1/cmd_vel carry a message".
 source /opt/ros/noetic/setup.bash
-source /mnt/c/Users/13907/lab2/scripts/harness.sh
+source "$(dirname "${BASH_SOURCE[0]}")/harness.sh"
 L="$LOG/parttwo"; mkdir -p "$L"
 kill_ros; xvfb_up
 echo "########## $(date -Is) KEY ROUTE PROBE ##########"

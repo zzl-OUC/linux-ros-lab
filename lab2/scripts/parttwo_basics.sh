@@ -3,8 +3,8 @@
 # GUI nodes (turtlesim, rqt_graph, rqt_tf_tree, rviz) run under WSLg; each is
 # screenshotted, and every command's text output is logged.
 source /opt/ros/noetic/setup.bash
-SHOT=/mnt/c/Users/13907/lab2/shots
-LOG=/mnt/c/Users/13907/lab2/logs/parttwo
+SHOT=${LAB2_ROOT:-$HOME/lab2}/shots
+LOG=${LAB2_ROOT:-$HOME/lab2}/logs/parttwo
 mkdir -p "$SHOT" "$LOG"
 
 cleanup() {

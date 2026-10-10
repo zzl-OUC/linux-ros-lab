@@ -3,7 +3,7 @@
 # Feed real arrow-key escape sequences (ESC [ A) instead of w/a, and judge on
 # /turtle1/cmd_vel plus the pose delta.
 source /opt/ros/noetic/setup.bash
-source /mnt/c/Users/13907/lab2/scripts/harness.sh
+source "$(dirname "${BASH_SOURCE[0]}")/harness.sh"
 L="$LOG/parttwo"; mkdir -p "$L"
 kill_ros; xvfb_up
 echo "########## $(date -Is) ARROW-KEY TELEOP ##########"
@@ -58,4 +58,4 @@ pkill -9 -f turtle_teleop_key
 grab 29_turtlesim_teleop_moved 1
 kill_ros
 echo "########## $(date -Is) ARROW-KEY TELEOP DONE ##########"
-sha256sum "$SHOT"/28*.png "$SHOT"/29*.png 2>/dev/null | sed 's#/mnt/c/Users/13907/lab2/shots/##'
+sha256sum "$SHOT"/28*.png "$SHOT"/29*.png 2>/dev/null | sed "s#^$SHOT/##"

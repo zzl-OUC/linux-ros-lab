@@ -1,7 +1,7 @@
 #!/bin/bash
 # Route D produced nothing; run each capture command with its stderr visible.
 source /opt/ros/noetic/setup.bash
-OUT=/mnt/c/Users/13907/lab2/shots/_probe
+OUT=${LAB2_ROOT:-$HOME/lab2}/shots/_probe
 rm -f "$OUT"/D* "$OUT"/E* "$OUT"/F*
 roscore > /tmp/p3_roscore.log 2>&1 & sleep 5
 rosrun turtlesim turtlesim_node > /tmp/p3_turtle.log 2>&1 & sleep 6

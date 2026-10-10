@@ -47,7 +47,8 @@ ls -l ~/vnav_ws/devel/lib/two_drones_pkg/ 2>&1
 
 echo
 echo "=== 5. copy stencil sources out for review ==="
-mkdir -p /mnt/c/Users/13907/lab2/src_snapshot
-cp -a ~/labs/VNAV-labs/lab2/two_drones_pkg/. /mnt/c/Users/13907/lab2/src_snapshot/
-find /mnt/c/Users/13907/lab2/src_snapshot -type f | sed 's#.*/src_snapshot/##' | sort
+mkdir -p ${LAB2_ROOT:-$HOME/lab2}/src_snapshot
+UPSTREAM="${UPSTREAM:-$HOME/labs/VNAV-labs}"
+cp -a "$UPSTREAM/lab2/two_drones_pkg/." ${LAB2_ROOT:-$HOME/lab2}/src_snapshot/
+find ${LAB2_ROOT:-$HOME/lab2}/src_snapshot -type f | sed 's#.*/src_snapshot/##' | sort
 echo "########## step4 done ##########"

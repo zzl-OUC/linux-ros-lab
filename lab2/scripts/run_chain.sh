@@ -1,6 +1,8 @@
 #!/bin/bash
-exec >> /mnt/c/Users/13907/lab2/logs/chain_ABC.log 2>&1
-cd /mnt/c/Users/13907/lab2/scripts
+LAB2_ROOT="${LAB2_ROOT:-$HOME/lab2}"
+mkdir -p "$LAB2_ROOT/logs"
+cd "$(dirname "$0")"
+exec >> "$LAB2_ROOT/logs/chain_ABC.log" 2>&1
 for f in evid_A2_teleop.sh evid_B_part3_stencil.sh evid_C_part3_impl.sh harness.sh; do
   sed -i 's/\r$//' "$f"
 done

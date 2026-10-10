@@ -2,7 +2,7 @@
 # Which screenshot route actually captures WSLg windows?
 # scrot on :0 gave 6 byte-identical blanks -> test the weston route instead.
 source /opt/ros/noetic/setup.bash
-OUT=/mnt/c/Users/13907/lab2/shots/_probe
+OUT=${LAB2_ROOT:-$HOME/lab2}/shots/_probe
 mkdir -p "$OUT"; rm -f "$OUT"/*.png
 
 echo "=== available capturers ==="

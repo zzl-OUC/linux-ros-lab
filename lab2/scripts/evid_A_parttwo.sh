@@ -2,7 +2,7 @@
 # LAB2 Part Two -- ROS basics, with a capture route that actually sees the windows
 # and the teleop timing bug fixed (echo must start BEFORE the keys are fed).
 source /opt/ros/noetic/setup.bash
-source /mnt/c/Users/13907/lab2/scripts/harness.sh
+source "$(dirname "${BASH_SOURCE[0]}")/harness.sh"
 L="$LOG/parttwo"; mkdir -p "$L"
 kill_ros
 xvfb_up
@@ -93,4 +93,4 @@ rviz > "$L/rviz.log" 2>&1 &
 grab 27_rviz_blank 10
 kill_ros
 echo "########## $(date -Is) PART TWO DONE ##########"
-sha256sum "$SHOT"/2*.png | sed 's#/mnt/c/Users/13907/lab2/shots/##'
+sha256sum "$SHOT"/2*.png | sed "s#^$SHOT/##"
